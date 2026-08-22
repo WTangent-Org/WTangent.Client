@@ -5,7 +5,7 @@ namespace WTangent.Client.Commands;
 
 
 /// <summary>用默认浏览器打开目标 serve 的 Web UI（agent web [<remote>]）</summary>
-[AgentComponent]
+[AgentCommand]
 public sealed class WebCommand : Command
 {
     public WebCommand() : base("web", "浏览器打开目标 serve 的 Web UI")

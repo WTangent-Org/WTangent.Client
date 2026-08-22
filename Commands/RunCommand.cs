@@ -7,7 +7,7 @@ namespace WTangent.Client.Commands;
 
 /// <summary>一次性问答（**LLM 归 serve**：客户端只收集 prompt，serve 调模型）。
 /// 目标 serve：[remote]（名/ET加入码/URL）缺省优先级：本地已装 → 缓存 remote → 本地自动下载（见 ClientPaths.ResolveUrl）。</summary>
-[AgentComponent]
+[AgentCommand]
 public sealed class RunCommand : Command
 {
     public RunCommand() : base("run", "一次性问答：agent run <prompt> [<remote>]（客户端只发 prompt；LLM 由 serve 调用）")

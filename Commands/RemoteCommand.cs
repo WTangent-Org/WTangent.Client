@@ -7,7 +7,7 @@ namespace WTangent.Client.Commands;
 /// <summary>服务器注册表（顶层命令）：agent remote add/list/remove/user/passwd。
 /// add：&lt;name&gt; &lt;ip&gt; [port] [加入码]（有加入码=et，无=lan）；账号是**全局**凭据：agent remote user &lt;名&gt; / passwd &lt;密码&gt;。
 /// default-server = last-used 缓存（run/clone 自动更新），无需配置。</summary>
-[AgentComponent]
+[AgentCommand]
 public sealed class RemoteCommand : Command
 {
     public RemoteCommand() : base("remote", "服务器注册表：list / add <name> <ip> [port] [加入码] / remove / user / passwd")
