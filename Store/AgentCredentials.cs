@@ -3,9 +3,11 @@ using System.Text.Json;
 namespace WTangent.Client.Store;
 
 /// <summary>全局客户端凭据（%APPDATA%\agent\credentials.json）：User/Passwd 所有 remote 共用（鉴权用）。
-/// 由 agent remote user <name> / agent remote passwd <密码> 写入；明文存储，未来加密。</summary>
+/// 由 agent remote user &lt;name&gt; / agent remote passwd &lt;密码&gt; 写入；明文存储，未来加密。</summary>
 public sealed class AgentCredentials
 {
+    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
+
     public string? User { get; set; }
     public string? Passwd { get; set; }
 
@@ -19,5 +21,5 @@ public sealed class AgentCredentials
     }
 
     public void Save() =>
-        File.WriteAllText(Path, JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true }));
+        File.WriteAllText(Path, JsonSerializer.Serialize(this, JsonOptions));
 }

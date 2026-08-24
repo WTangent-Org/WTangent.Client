@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace WTangent.Client.Commands;
 
 
-/// <summary>用默认浏览器打开目标 serve 的 Web UI（agent web [<remote>]）</summary>
+/// <summary>用默认浏览器打开目标 serve 的 Web UI（agent web [&lt;remote&gt;]）</summary>
 [AgentCommand]
 public sealed class WebCommand : Command
 {

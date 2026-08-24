@@ -15,9 +15,11 @@ public sealed record RemoteEntry(string Name, string Host, int Port, string? EtC
 /// 读写优先走宿主注入的 Entry.App.Store（统一原子写 + 变更事件），未注入时回退直接文件访问。</summary>
 public sealed class ServerRegistry(string? path = null)
 {
+    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
+
     private string StorePath => path ?? Path.Combine(AgentPaths.DataDir, "remotes.json");
     private static string LastUsedFile => Path.Combine(AgentPaths.DataDir, "last-remote.txt");
-    private static WTangent.Core.IAppStore? AppStore => Entry.App?.Store;
+    private static IAppStore? AppStore => Entry.App.Store;
 
     public void Add(string name, string host, int port, string? code = null, string kind = "lan")
     {
@@ -50,16 +52,13 @@ public sealed class ServerRegistry(string? path = null)
     public static void SetLastUsed(string nameOrUrl)
     {
         try { Directory.CreateDirectory(Path.GetDirectoryName(LastUsedFile)!); File.WriteAllText(LastUsedFile, nameOrUrl); }
-        catch { }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException) { }
     }
 
     private List<RemoteEntry> Load()
     {
-        if (AppStore is not null)
-        {
-            var viaStore = AppStore.ReadJson<List<RemoteEntry>>("remotes.json");
-            if (viaStore is not null) return viaStore;
-        }
+        var viaStore = AppStore?.ReadJson<List<RemoteEntry>>("remotes.json");
+        if (viaStore is not null) return viaStore;
         if (!File.Exists(StorePath)) return [];
         try
         {
@@ -102,6 +101,6 @@ public sealed class ServerRegistry(string? path = null)
             AppStore.WriteJson("remotes.json", all);
             return;
         }
-        File.WriteAllText(StorePath, JsonSerializer.Serialize(all, new JsonSerializerOptions { WriteIndented = true }));
+        File.WriteAllText(StorePath, JsonSerializer.Serialize(all, JsonOptions));
     }
 }
