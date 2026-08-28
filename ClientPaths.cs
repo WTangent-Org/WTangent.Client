@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using WTangent.Client.Store;
 
 namespace WTangent.Client;
 
@@ -17,7 +16,7 @@ public static class ClientPaths
     {
         if (remote is { Length: > 0 })
         {
-            var hit = new ServerRegistry().Find(remote);
+            var hit = new ServerRegistry(store: Entry.App.Store).Find(remote);
             if (hit is not null) return hit.Url;
             if (remote.StartsWith("http", StringComparison.OrdinalIgnoreCase)) return remote;
             Console.Error.WriteLine($"[agent-client] 服务器 {remote} 未配置（agent remote add <name> <ip> [port]）");
@@ -32,7 +31,7 @@ public static class ClientPaths
         {
             var url = last.StartsWith("http", StringComparison.OrdinalIgnoreCase)
                 ? last
-                : new ServerRegistry().Find(last)?.Url;
+                : new ServerRegistry(store: Entry.App.Store).Find(last)?.Url;
             if (url is not null) return url;
         }
         // 3. 本地（自动下载 serve 组件）→ 回环

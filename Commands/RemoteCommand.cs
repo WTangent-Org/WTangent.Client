@@ -1,5 +1,4 @@
 using System.CommandLine;
-using WTangent.Client.Store;
 
 namespace WTangent.Client.Commands;
 
@@ -18,7 +17,7 @@ public sealed class RemoteCommand : Command
             var cred = AgentCredentials.Load();
             var userLine = cred.User is { Length: > 0 } ? $"  全局用户:{cred.User}" : "  全局用户:（未设置，agent remote user <名>）";
             Console.WriteLine(userLine);
-            var items = new ServerRegistry().List();
+            var items = new ServerRegistry(store: Entry.App.Store).List();
             if (items.Count == 0) Console.WriteLine("（无服务器，用 agent remote add <name> <ip> [port] [加入码] 添加）");
             foreach (var r in items)
             {
@@ -55,7 +54,7 @@ public sealed class RemoteCommand : Command
             var port = pr.GetValue(portArg) is { } p and > 0 ? p : 8890;
             var code = pr.GetValue(codeArg);
             var kind = code is { Length: > 0 } ? "et" : "lan";
-            new ServerRegistry().Add(name, ip, port, code, kind);
+            new ServerRegistry(store: Entry.App.Store).Add(name, ip, port, code, kind);
             Console.WriteLine(kind == "et"
                 ? $"[remote] et {name} → {ip}:{port}  加入码:{code}"
                 : $"[remote] lan {name} → {ip}:{port}");
@@ -67,7 +66,7 @@ public sealed class RemoteCommand : Command
         {
             var name = pr.GetValue(nameArg);
             if (name is null) return 1;
-            new ServerRegistry().Remove(name);
+            new ServerRegistry(store: Entry.App.Store).Remove(name);
             return 0;
         });
 

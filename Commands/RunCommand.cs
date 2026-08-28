@@ -1,6 +1,4 @@
 using System.CommandLine;
-using WTangent.Client.Store;
-using WTangent.Client.Session;
 
 namespace WTangent.Client.Commands;
 
