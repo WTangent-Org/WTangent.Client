@@ -1,1 +1,1 @@
-{ "name": "client", "asset": "client", "minCore": "0.0.10", "commands": ["remote", "run", "web"] }
+{ "name": "client", "asset": "client", "minCore": "0.0.11", "commands": ["remote", "run", "web"] }
